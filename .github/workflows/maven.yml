@@ -18,10 +18,13 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    defaults:
+      run: 
+        working-directory: ./data-generator
+    
     steps:
     - uses: actions/checkout@v3
-    - name: Set up JDK 17
+    - name: Set up JDK 21
       uses: actions/setup-java@v3
       with:
         java-version: '21'
