@@ -1,5 +1,6 @@
 package babysimulator.datagenerator;
 
+import babysimulator.datagenerator.ctgsimulator.CTGSimulator;
 import babysimulator.datagenerator.messagebus.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,6 +10,8 @@ public class DataGeneratorApplication {
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(DataGeneratorApplication.class, args);
+
+		TestCTGSimulator();
 
 		MessageBus broker = new RabbitMQ();
 
@@ -27,8 +30,18 @@ public class DataGeneratorApplication {
 			}
 		}
 
-		// Once the API call has been added, the topic and message should be variables instead of hardcoded
+		// NOTE: Once the API call has been added, the topic and message should be variables instead of hardcoded
 		broker.publishToTopic("1", "test message");
 	}
 
+	// NOTE: Remove this method to the websockets implementation once it's done
+	private static void TestCTGSimulator() throws InterruptedException {
+		CTGSimulator sim = new CTGSimulator();
+
+		long startTime = System.currentTimeMillis();
+		for(int count = 0; count <= 10; count++) {
+			System.out.println(sim.createJSONData(System.currentTimeMillis(), startTime));
+			Thread.sleep(50);
+		}
+	}
 }

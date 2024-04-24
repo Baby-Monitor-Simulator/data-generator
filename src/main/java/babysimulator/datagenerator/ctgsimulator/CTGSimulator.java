@@ -1,22 +1,25 @@
 package babysimulator.datagenerator.ctgsimulator;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
 public class CTGSimulator {
-    private GraphSet set = new GraphSet();
+    private static final GraphSet set = new GraphSet();
 
-    public void createJSONData() {
+    public JsonObject createJSONData(long currentTime, long startTime) {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("x", currentTime - startTime);
 
-    }
-
-    private GraphSet generateYValue() {
         for (GraphValue val: set.values) {
             Random random = new Random();
             val.value = random.nextInt(val.upperBoundary - val.lowerBoundary) + 1;
+            obj.addProperty(val.title, val.value);
         }
 
-        return set;
+        return obj;
     }
 }
