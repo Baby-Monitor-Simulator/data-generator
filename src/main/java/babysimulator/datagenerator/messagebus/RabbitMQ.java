@@ -1,10 +1,12 @@
 package babysimulator.datagenerator.messagebus;
 
 import com.rabbitmq.client.*;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class RabbitMQ implements MessageBus {
     Connection connection;
     final private String graphExchange = "graphdata";
