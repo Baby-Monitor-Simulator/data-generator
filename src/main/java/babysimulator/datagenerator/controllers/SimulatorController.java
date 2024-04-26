@@ -21,26 +21,27 @@ public class SimulatorController {
         broker = messageBus;
     }
 
-    // NOTE: this method should be split into multiple parts
-    // first a room is created (addRoom), body should be more than just an integer
-    // then a room can be started -> this should be a separate api call, an update maybe?
-    // in the update room, the status of the room should be checked
-    // if it goes from not started -> started, then the data should get pushed every few ms
+    /* NOTE: this method should be split into multiple parts
+    first a room is created (addRoom), body should be more than just an integer
+    then a room can be started -> this should be a separate api call, an update maybe?
+    in the update room, the status of the room should be checked
+    if it goes from not started -> started, then the data should get pushed every few ms */
     @PostMapping
-    public void addRoom(@RequestBody Integer roomId) {
+    public void addRoom(@RequestBody int roomId) {
         System.out.println("Room added with roomId: " + roomId);
-        startPublishing();
+        startPublishing(roomId);
     }
 
-    private void startPublishing() {
+    /* NOTE: how to make this in a way that it can get cancelled? especially when considering horizontal scaling
+    possible solution: java timer tasks? complicates the structure of the service and horizontal scaling is an issue */
+    private void startPublishing(int roomId) {
         long startTime = System.currentTimeMillis();
-        for(int count = 0; count <= 10; count++) {
+        while (true) {
             JsonObject json = simulator.createJSONData(System.currentTimeMillis(), startTime);
 
-            // NOTE: Once the API call has been added, the topic and message should be variables instead of hardcoded
             try {
-                broker.publishToTopic("1", json.toString());
-                Thread.sleep(50);
+                broker.publishToTopic("room" + roomId, json.toString());
+                Thread.sleep(500);
             } catch (Exception e){
                 System.out.println(e);
             }

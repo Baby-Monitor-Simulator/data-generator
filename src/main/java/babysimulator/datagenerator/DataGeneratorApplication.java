@@ -13,8 +13,6 @@ public class DataGeneratorApplication {
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(DataGeneratorApplication.class, args);
-
-		//TestCTGSimulator();
 		MessageBus broker = new RabbitMQ();
 
 		int maxTries = 5;
@@ -33,15 +31,5 @@ public class DataGeneratorApplication {
 		}
 
 		SimulatorController controller = new SimulatorController(sim, broker);
-	}
-
-	// NOTE: Remove this method to the websockets implementation once it's done
-	private static void TestCTGSimulator() throws InterruptedException {
-
-		long startTime = System.currentTimeMillis();
-		for(int count = 0; count <= 10; count++) {
-			System.out.println(sim.createJSONData(System.currentTimeMillis(), startTime));
-			Thread.sleep(50);
-		}
 	}
 }
